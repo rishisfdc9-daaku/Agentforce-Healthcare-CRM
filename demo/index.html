@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentforce in Healthcare CRM — AI Agents for Case Triage and Support (Demo)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Agentforce in Healthcare CRM — Support Agent Console</h1>
+  <p>By Rishi Gullapalli &middot; Fictional prototype demo &middot; Triage, summary, chat, escalation, redaction and audit — all running locally in your browser.</p>
+</header>
+
+<div class="disclaimer"><strong>Disclaimer — please read:</strong> This is a <strong>fictional prototype</strong>, not medical advice and not a real healthcare system. All members, cases and knowledge articles are invented mock data. No real patient data is used. If you have a medical emergency, call emergency services (e.g. 911 in the US) or go to your nearest emergency department, and contact a human clinician — do not rely on this demo.</div>
+
+<main>
+  <section class="card">
+    <h2>1. Submit a mock support case</h2>
+    <p>Try an example below, or write your own fictional case. Nothing you type leaves this page.</p>
+    <div id="examples"></div>
+    <label for="memberName">Member name (fictional)</label>
+    <input id="memberName" value="Alex Morgan (fictional)">
+    <label for="subject">Subject</label>
+    <input id="subject" value="Claim denied for recent visit">
+    <label for="categoryHint">What is this about? (optional hint)</label>
+    <select id="categoryHint">
+      <option value="">Let the triage agent decide</option>
+      <option>Benefits</option><option>Claims</option><option>Appointment</option><option>Care Coordination</option><option>General Enquiry</option>
+    </select>
+    <label for="description">Case description (fictional only — try including a fake phone like 555-123-4567 to see redaction)</label>
+    <textarea id="description">My claim was denied last week and I received a bill for the visit. I need help understanding the denial reason. You can reach me at 555-123-4567. Member ID MEM-123456.</textarea>
+    <label><input type="checkbox" id="flagEmergency" style="width:auto"> This is an emergency (forces P1 + human escalation)</label>
+    <label><input type="checkbox" id="requestHuman" style="width:auto"> Member requested a human agent</label>
+    <div>
+      <button id="triageBtn">Run Triage Agent</button>
+      <button id="clearBtn" class="secondary">Clear results</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. Triage result</h2>
+    <div id="triageResult"><p>No case triaged yet. Submit a case to see urgency, category, confidence, routing and reasons.</p></div>
+    <h3>Case summary (extractive — copied from your case text, nothing invented)</h3>
+    <div id="summaryResult"><p>—</p></div>
+    <h3>PHI redaction</h3>
+    <label><input type="checkbox" id="showMasked" checked style="width:auto"> Show masked version (recommended)</label>
+    <div id="redactionResult"><p>—</p></div>
+    <h3>Human override</h3>
+    <p>A human can correct the agent. Overrides are logged in the audit trail.</p>
+    <label for="overrideUrgency">Override urgency</label>
+    <select id="overrideUrgency"><option value="">Keep agent decision</option><option>P1</option><option>P2</option><option>P3</option><option>P4</option></select>
+    <label for="overrideQueue">Override queue</label>
+    <input id="overrideQueue" placeholder="e.g. Claims & Billing">
+    <label for="overrideReason">Override reason</label>
+    <input id="overrideReason" placeholder="e.g. Member asked for specialist review">
+    <button id="overrideBtn" class="danger">Apply human override</button>
+  </section>
+
+  <section class="card">
+    <h2>3. Conversational support agent (mock knowledge base)</h2>
+    <p>Ask about benefits, claims, appointments, referrals, prescriptions or care coordination. Answers cite mock articles (KB-101 … KB-106). If nothing matches well, the agent says it does not know and escalates to a human instead of guessing.</p>
+    <div class="chat" id="chat"></div>
+    <label for="chatInput">Your question (fictional)</label>
+    <input id="chatInput" placeholder="e.g. What does my benefits coverage include?">
+    <button id="askBtn">Ask support agent</button>
+    <button id="escalateBtn" class="secondary">Escalate to human</button>
+  </section>
+
+  <section class="card">
+    <h2>5. Pre-deployment guard — own agents guarding the deployment</h2>
+    <p>Before anything deploys, my own guardian agent runs every check, writes a developer report, and the remediation agent fixes what it safely can. High-risk fixes need a named human approval — they are never silently auto-deployed. This section runs the same code as the Node tests (<code>core/guardian.js</code>, <code>core/remediation.js</code>, <code>core/predeploy.js</code>).</p>
+    <p><em>Own-agent note:</em> the guardian and remediation agents below are instances of my own agent framework (<code>core/agent.js</code>), not just a platform configuration. Their reasoning trace is shown after a guard run.</p>
+    <label><input type="checkbox" id="simPhiLeak" style="width:auto"> Simulate a PHI leak in agent output (to test the guard — labelled as simulated, not a real leak)</label>
+    <label><input type="checkbox" id="simEscGap" style="width:auto"> Simulate an escalation gap (to test the guard — labelled as simulated)</label>
+    <label for="approverName">Human approver for high-risk patches (leave blank to see them stay pending)</label>
+    <input id="approverName" placeholder="e.g. Rishi Gullapalli">
+    <label><input type="checkbox" id="approveMediumLow" style="width:auto"> I approve any remaining Medium/Low issues (named approval is recorded in the deployment record)</label>
+    <div>
+      <button id="guardBtn">Run pre-deployment guard</button>
+      <button id="remediateBtn" class="secondary">Deploy remediation agent</button>
+      <button id="downloadReportBtn" class="secondary">Download developer report</button>
+    </div>
+    <div id="guardResult"><p>No guard run yet. Run the guard to see issues, the developer report, and the deployment verdict.</p></div>
+    <h3>Developer report</h3>
+    <pre id="devReport" style="white-space:pre-wrap;font-size:12.5px;background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px;max-height:320px;overflow:auto">—</pre>
+    <h3>Own-agent trace (guardian + remediation agents)</h3>
+    <pre id="agentTrace" style="white-space:pre-wrap;font-size:12.5px;background:#f1f5f9;padding:12px;border-radius:6px;max-height:280px;overflow:auto">—</pre>
+  </section>
+
+  <section class="card">
+    <h2>4. Audit trail</h2>
+    <p>Who/what decided, when, with what confidence, and any human override. This is the accountability record — in a real org this would be stored on the Case and an audit object in Salesforce.</p>
+    <pre id="auditLog">No audit entries yet.</pre>
+    <button id="downloadAuditBtn" class="secondary">Download audit as text</button>
+  </section>
+</main>
+
+<footer>
+  <p><strong>What is real vs mocked here:</strong> the triage scoring, urgency rules, routing, extractive summary, knowledge retrieval, redaction, escalation and audit logic are real JavaScript running in this page (see <code>../core/</code>). The members, cases, knowledge articles and any "integrations" are mocked. The Salesforce code in <code>../salesforce/</code> is scaffolding — it is not deployed to any org.</p>
+  <p>Author: Rishi Gullapalli (rishisfdc9-daaku). Fictional data only. Not medical advice.</p>
+</footer>
+
+<script src="../core/redaction.js"></script>
+<script src="../core/urgency.js"></script>
+<script src="../core/routing.js"></script>
+<script src="../core/triage.js"></script>
+<script src="../core/summarisation.js"></script>
+<script src="../core/retrieval.js"></script>
+<script src="../core/consent.js"></script>
+<script src="../core/escalation.js"></script>
+<script src="../core/audit.js"></script>
+<script src="../core/evaluation.js"></script>
+<script src="../core/agent.js"></script>
+<script src="../core/guardian.js"></script>
+<script src="../core/issue-report.js"></script>
+<script src="../core/remediation.js"></script>
+<script src="../core/predeploy.js"></script>
+<script src="../core/tools.js"></script>
+<script src="../core/agents.js"></script>
+<script src="../core/index.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

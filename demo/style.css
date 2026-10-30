@@ -1,0 +1,28 @@
+/* Agentforce in Healthcare CRM — demo styles. By Rishi Gullapalli. */
+:root { --navy: #0b2545; --teal: #0e7c7b; --red: #b42318; --amber: #b54708; --bg: #eef2f7; --card: #fff; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: #1a2a3a; }
+header { background: var(--navy); color: #fff; padding: 22px 28px; }
+header h1 { margin: 0 0 6px; font-size: 24px; }
+header p { margin: 4px 0; opacity: .9; }
+.disclaimer { background: #fff3cd; border-left: 5px solid var(--amber); padding: 12px 16px; margin: 16px 28px; border-radius: 6px; }
+main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 28px 28px; }
+.card { background: var(--card); border-radius: 10px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.card h2 { margin-top: 0; font-size: 18px; }
+label { display: block; margin: 10px 0 4px; font-weight: 600; font-size: 14px; }
+input, select, textarea { width: 100%; padding: 9px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+textarea { min-height: 110px; }
+button { background: var(--teal); color: #fff; border: 0; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 8px 6px 0 0; }
+button.secondary { background: #475569; }
+button.danger { background: var(--red); }
+.example { background: #f1f5f9; border-radius: 6px; padding: 10px; margin: 8px 0; cursor: pointer; font-size: 14px; }
+.example:hover { background: #e2e8f0; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; color: #fff; }
+.P1 { background: var(--red); } .P2 { background: #dc6803; } .P3 { background: #175cd3; } .P4 { background: #067647; }
+.pill { display: inline-block; background: #e0f2f2; padding: 3px 8px; border-radius: 999px; font-size: 12px; margin: 2px; }
+#auditLog { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: 12.5px; background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 6px; max-height: 320px; overflow: auto; }
+.chat { border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; min-height: 140px; max-height: 280px; overflow: auto; }
+.msg { margin: 8px 0; } .msg.user { text-align: right; } .msg b { display: block; font-size: 12px; opacity: .7; }
+.cite { font-size: 12px; color: #175cd3; }
+footer { padding: 0 28px 28px; font-size: 13px; color: #475569; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } }
