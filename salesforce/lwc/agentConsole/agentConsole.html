@@ -1,0 +1,57 @@
+<!-- agentConsole — Agentforce in Healthcare CRM (SCAFFOLDING, NOT DEPLOYED)
+     Author: Rishi Gullapalli (rishisfdc9-daaku). Fictional prototype only.
+     Support agent console: triage result, chat, escalation, audit.
+     Wire the buttons to CaseTriageService / ConversationalAgentService /
+     EscalationService / AuditLogService via @wire / imperative Apex in production.
+     This template shows the intended layout and human controls. -->
+<template>
+    <lightning-card title="Support Agent Console — Agentforce in Healthcare CRM">
+        <div class="slds-p-around_medium">
+            <p class="slds-text-body_small">
+                Fictional prototype. Not medical advice. If this is an emergency,
+                contact emergency services or a human clinician immediately.
+            </p>
+
+            <lightning-textarea label="Case description (fictional only)"
+                value={description} onchange={handleDescriptionChange}>
+            </lightning-textarea>
+            <lightning-button label="Run Triage Agent" variant="brand"
+                onclick={handleTriage} class="slds-m-top_small"></lightning-button>
+            <lightning-button label="Escalate to Human" variant="destructive"
+                onclick={handleEscalate} class="slds-m-top_small slds-m-left_small"></lightning-button>
+
+            <template if:true={triage}>
+                <div class="slds-box slds-m-top_medium">
+                    <p><strong>Urgency:</strong> {triage.urgency} &nbsp;|&nbsp;
+                       <strong>Category:</strong> {triage.category} &nbsp;|&nbsp;
+                       <strong>Confidence:</strong> {triage.confidence}%</p>
+                    <p><strong>Queue:</strong> {triage.queue}</p>
+                    <p><strong>Reasons:</strong> {triageReasons}</p>
+                    <p><strong>Human review required:</strong> {triage.requiresHumanReview}</p>
+                </div>
+            </template>
+
+            <lightning-input label="Ask the support agent (mock knowledge base)"
+                value={question} onchange={handleQuestionChange}></lightning-input>
+            <lightning-button label="Ask" onclick={handleAsk} class="slds-m-top_small"></lightning-button>
+            <template if:true={answer}>
+                <div class="slds-box slds-m-top_medium">
+                    <p>{answer.answer}</p>
+                    <p class="slds-text-body_small"><strong>Sources:</strong> {answerCitations}</p>
+                    <template if:true={answer.escalated}>
+                        <p class="slds-text-color_error">Escalated to a human agent — the knowledge base did not cover this question.</p>
+                    </template>
+                </div>
+            </template>
+
+            <div class="slds-m-top_medium">
+                <lightning-input label="Human override — new queue" value={overrideQueue}
+                    onchange={handleOverrideQueueChange}></lightning-input>
+                <lightning-input label="Human override — reason" value={overrideReason}
+                    onchange={handleOverrideReasonChange}></lightning-input>
+                <lightning-button label="Apply Human Override" onclick={handleOverride}
+                    class="slds-m-top_small"></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
