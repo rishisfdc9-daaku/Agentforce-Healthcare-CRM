@@ -1,0 +1,24 @@
+<!-- caseSummaryPanel — Agentforce in Healthcare CRM (SCAFFOLDING, NOT DEPLOYED)
+     Author: Rishi Gullapalli (rishisfdc9-daaku). Fictional prototype only.
+     Shows the extractive case summary + audit note. Summaries here are
+     copied from case history, never invented — see CaseSummarisationService. -->
+<template>
+    <lightning-card title="Case Summary — Agentforce">
+        <div class="slds-p-around_medium">
+            <template if:true={summary}>
+                <p>{summary.summary}</p>
+                <ul class="slds-m-top_small">
+                    <template for:each={summary.bulletPoints} for:item="point">
+                        <li key={point}>{point}</li>
+                    </template>
+                </ul>
+                <p class="slds-text-body_small slds-m-top_small">{summary.note}</p>
+            </template>
+            <template if:false={summary}>
+                <p class="slds-text-body_small">No summary yet. Run the Summarisation Agent from the agent console.</p>
+            </template>
+            <lightning-button label="Generate Summary" variant="brand"
+                onclick={handleGenerate} class="slds-m-top_small"></lightning-button>
+        </div>
+    </lightning-card>
+</template>
